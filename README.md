@@ -17,6 +17,11 @@ This is a [Raycast](https://www.raycast.com) [plugin](https://www.raycast.com/st
 
 > Tweet to <a target="_blank" rel="noopener" href="https://vas.cx/twitter">@vsnthdev</a>, I'd love to know your opinion & feedback on this project 🤩
 
+## 🛠️ Configuration
+
+If you store your screenshots in a different directory other than your downloads folder (`~/Downloads`), then you can [click here](assets/settings.png) to see how to configure it to look for screenshots in a different folder.
+
+
 ## 💡 Why did I build this?
 
 I work with AI a lot while vibe coding for my work projects, where I constantly take hundreds of screenshots to show AI how things look. It quickly became hard to always pick the right screenshot when I had lots of them that looked similar. So, frequent cleanup of screenshots was required, but there were too many steps involved in deleting screenshots. I built this Raycast plugin to delete all screenshots in a single go, super fast 👌
