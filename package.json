@@ -23,12 +23,30 @@
             "title": "Screenshots Folder",
             "description": "Select the folder where your screenshots are stored",
             "default": "~/Downloads"
+        },
+        {
+            "name": "deleteRecordings",
+            "default": true,
+            "description": "Along with screenshots also delete screen recordings",
+            "required": true,
+            "type": "checkbox",
+            "label": "Delete screen recordings",
+            "title": "Additional delete options"
+        },
+        {
+            "name": "deleteWhatsAppImages",
+            "type": "checkbox",
+            "required": true,
+            "description": "Along with screenshots delete images downloaded from WhatsApp",
+            "default": false,
+            "label": "Delete WhatsApp Images"
         }
     ],
     "dependencies": {
         "@raycast/api": "^1.102.4",
         "@raycast/utils": "^2.2.0",
-        "comma-number": "^2.1.0"
+        "comma-number": "^2.1.0",
+        "glob": "^11.0.3"
     },
     "devDependencies": {
         "@raycast/eslint-config": "^2.0.4",

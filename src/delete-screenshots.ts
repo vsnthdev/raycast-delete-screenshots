@@ -7,61 +7,59 @@ import { showToast, Toast, getPreferenceValues, closeMainWindow } from '@raycast
 import { promises as fs } from 'fs'
 import { join } from 'path'
 import commaNumber from 'comma-number'
+import { glob } from 'glob'
 
 interface Preferences {
     folder: string
+    deleteWhatsAppImages: boolean
+    deleteRecordings: boolean
 }
 
 export default async function main() {
-    try {
-        const preferences = getPreferenceValues<Preferences>()
-        const targetFolder = preferences.folder
+    closeMainWindow()
+    const preferences = getPreferenceValues<Preferences>()
 
-        await showToast({
-            style: Toast.Style.Animated,
-            title: 'Scanning for screenshots...',
-        })
+    await showToast({
+        style: Toast.Style.Animated,
+        title: 'Scanning for screenshots...',
+    })
 
-        // read the directory contents
-        const files = await fs.readdir(targetFolder)
+    const promises: Promise<string[]>[] = [
+        glob(join(preferences.folder, 'Screenshot [0-9][0-9][0-9][0-9]*.png'))
+    ]
 
-        // filter for screenshot png files
-        const pngFiles = files.filter(file =>
-            file.toLowerCase().endsWith('.png') &&
-            file.toLowerCase().startsWith('screenshot')
+    if (preferences.deleteWhatsAppImages) {
+        promises.push(
+            glob(join(preferences.folder, 'WhatsApp Image [0-9][0-9][0-9][0-9]*.jpeg'))
         )
+    }
 
-        if (pngFiles.length === 0) {
-            await closeMainWindow()
-            await showToast({
-                style: Toast.Style.Success,
-                title: `Deleted ${commaNumber(0)} screenshots`
-            })
-            return
-        }
+    if (preferences.deleteRecordings) {
+        promises.push(
+            glob(join(preferences.folder, 'Screen Recording [0-9][0-9][0-9][0-9]*.mov'))
+        )
+    }
 
-        // delete each png file
-        const deletePromises = pngFiles.map(async (file) => {
-            const filePath = join(targetFolder, file)
-            await fs.unlink(filePath)
-            return file
-        })
+    const nested = await Promise.all(promises)
+    const files = nested.flat(1)
 
-        const deletedFiles = await Promise.all(deletePromises)
-
-        await closeMainWindow()
+    if (files.length == 0) {
         await showToast({
             style: Toast.Style.Success,
-            title: `Deleted ${commaNumber(deletedFiles.length)} screenshots`
+            title: `Deleted ${commaNumber(0)} screenshots`
         })
-
-    } catch (error) {
-        console.error('Error deleting PNG files:', error)
-
-        await showToast({
-            style: Toast.Style.Failure,
-            title: 'Failed to delete PNG files',
-            message: error instanceof Error ? error.message : 'Unknown error occurred',
-        })
+        return
     }
+
+    // delete each png file
+    const deletePromises = files.map(async (file) => {
+        await fs.unlink(file)
+        return file
+    })
+
+    const deletedFiles = await Promise.all(deletePromises)
+    await showToast({
+        style: Toast.Style.Success,
+        title: `Deleted ${commaNumber(deletedFiles.length)} screenshots`
+    })
 }

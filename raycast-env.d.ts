@@ -9,7 +9,11 @@
 
 type ExtensionPreferences = {
   /** Screenshots Folder - Select the folder where your screenshots are stored */
-  "folder": string
+  "folder": string,
+  /** Additional delete options - Along with screenshots also delete screen recordings */
+  "deleteRecordings": boolean,
+  /** undefined - Along with screenshots delete images downloaded from WhatsApp */
+  "deleteWhatsAppImages": boolean
 }
 
 /** Preferences accessible in all the extension's commands */
