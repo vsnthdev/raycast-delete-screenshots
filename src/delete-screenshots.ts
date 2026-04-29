@@ -25,7 +25,8 @@ export default async function main() {
     })
 
     const promises: Promise<string[]>[] = [
-        glob(join(preferences.folder, 'Screenshot [0-9][0-9][0-9][0-9]*.png'))
+        glob(join(preferences.folder, 'Screenshot [0-9][0-9][0-9][0-9]*.png')),
+        glob(join(preferences.folder, 'Screenshot_[0-9][0-9][0-9][0-9]*.jpg')),
     ]
 
     if (preferences.deleteWhatsAppImages) {
